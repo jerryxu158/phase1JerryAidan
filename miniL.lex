@@ -5,32 +5,48 @@
 
    /* some common rules */
 DIGIT    [0-9]
+LETR     [a-zA-Z]
 ASGN     :=
 EQUATE   ==
-LT       <(?=^[=>])
-GT       >(?=^=)
+LT       <(?![=>])
+GT       >(?!=)
 LTE      <=
 GTE      >=
 NE       <>
-NOT      "not"
+SEMI     ;
+NOT      "not"(?=\s)
+IF       "if"(?=\s)
+FUNC     "function"(?=\s)
+BEGINP   "beginparams"(?=\s)
+ENDP     "endparams"(?=\s)
+beginL   "beginlocals"(?=\s)
+endL     "endlocals"(?=\s)
+beginB   "beginbody"(?=\s)
+endB     "endbody"(?=\s)
+int      "integer"(?=\s)
+arr      "array"[DIGIT*]
+comment  ##.*\n
+
+IDEN     LETR(LETR*_*DIGIT*)+[LETR DIGIT](?=^_)
 
 %%
    /* specific lexer rules in regex */
 {DIGIT}+       {printf("NUMBER %s\n", yytext);}
-"+"            {printf("ADD\n");numOps++;}
-"-"            {printf("SUBTRACT\n");numOps++;}
-"*"            {printf("MULTIPLY\n");numOps++;}
-"/"            {printf("DIVIDE\n");numOps++;}
-"("            {printf("LEFT\n"); numParan++;}
-")"            {printf("RIGHT\n");numParan++;}
-EQUATE         {printf("is equal to\n");}
+"+"            {printf("ADD\n");}
+"-"            {printf("SUB\n");}
+"*"            {printf("MULT\n");}
+"/"            {printf("DIV\n");}
+"%"            {printf("MOD\n");}
+"("            {printf("LEFT\n");}
+")"            {printf("RIGHT\n");}
+EQUATE         {printf("EQ\n");}
 ASGN           {printf("ASSIGNED\n");}
-LT             {printf("is less than\n");}
-GT             {printf("is greater than\n");}
-LTE            {printf("is less than or equal to\n");}
-GTE            {printf("is greater than or equal to\n");}
-NOT            {printf("LOGICAL NOT\n");}
-NE             {printf("not equal to\n");}
+LT             {printf("LT\n");}
+GT             {printf("GT\n");}
+LTE            {printf("LTE\n");}
+GTE            {printf("GTE\n");}
+NOT            {printf("NOT\n");}
+NE             {printf("NEQ\n");}
 
 %%
 	/* C functions used in lexer */
