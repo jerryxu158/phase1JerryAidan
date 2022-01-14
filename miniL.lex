@@ -16,16 +16,19 @@ NE       <>
 SEMI     ;
 COLN     :
 NOT      "not"[\s]
+OF       "of"\s
 IF       "if"[\s]
-FUNC     "function "
+FUNC     "function"[\s]
 BEGINP   "beginparams"[\s]
 ENDP     "endparams"[\s]
 beginL   "beginlocals"[\s]
 endL     "endlocals"[\s]
 beginB   "beginbody"[\s]
 endB     "endbody"[\s]
-int      "integer"\s
-arr      array[DIGIT*]\s+"of"\s+"integer"
+int      "integer"[\s]
+ret      "return"[\s]
+arr      array[DIGIT*]
+ID       [a-zA-z][a-zA-z1-9_]*[a-zA-z1-9]/* letter followed by digits,letters or _ and ends in a digit or a letter*/
 comment  ##.*\n
 
 %%
