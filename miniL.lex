@@ -6,38 +6,46 @@
 
    /* some common rules */
 DIGIT    [0-9]
+FUNC     "function"
 ID       [a-zA-Z][a-zA-Z1-9_]*[a-zA-Z1-9]
 SID      [a-zA-Z]
+INVALN   [DIGIT]][a-zA-Z1-9_]*[a-zA-Z1-9]
+INVALU   [a-zA-Z][a-zA-Z1-9_]*_
 ASGN     :=
 EQUATE   ==
 LT       <[^[=>]]
 GT       >[^=]
+LB       "\["
+RB       ]
+LP       "\("
+RP       ")"
+MOD      %
 LTE      <=
 GTE      >=
 NE       <>
 SEMI     ;
 COLN     :
 CMMA     ,
-comment  ##.*\n
+comment  ##.*
 NEWL     \n
 TAB      \t
-
+UNKNOWN  .
 
 %%
    /* specific lexer rules in regex */
-{DIGIT}+       {printf("NUMBER %s\n", yytext);}
+{DIGIT}+       {printf("NUMBER %s\n", yytext); row+= yyleng;}
 "+"            {printf("ADD\n");}
 "-"            {printf("SUB\n");}
 "*"            {printf("MULT\n");}
 "/"            {printf("DIV\n");}
-"%"            {printf("MOD\n");}
-"("            {printf("L_PAREN\n");}
-")"            {printf("R_PAREN\n");}
-"["            {printf("L_SQUARE_BRACKET\n");}
-"]"            {printf("R_SQUARE_BRACKET\n");}
-";"            {printf("SEMICOLON\n");}
-":"            {printf("COLON\n");}
-
+{MOD}            {printf("MOD\n");}
+{LP}           {printf("L_PAREN\n");}
+{RP}           {printf("R_PAREN\n");}
+{LB}           {printf("L_SQUARE_BRACKET\n");}
+{RB}           {printf("R_SQUARE_BRACKET\n");}
+{SEMI}         {printf("SEMICOLON\n");}
+{COLN}         {printf("COLON\n");}
+{comment}      {}   
 {EQUATE}       {printf("EQ\n");}
 {ASGN}         {printf("ASSIGNED\n");}
 {LT}           {printf("LT\n");}
@@ -46,7 +54,7 @@ TAB      \t
 {GTE}          {printf("GTE\n");}
 {NE}           {printf("NEQ\n");}
 "array"        {printf("ARRAY\n");}
-"function"     {printf("FUNCTION\n");}
+{FUNC}         {printf("FUNCTION\n");}
 "beginparams"  {printf("BEGINPARAMS\n");}
 "endparams"    {printf("ENDPARAMS\n");}
 "beginlocals"  {printf("BEGINLOCALS\n");}
@@ -72,11 +80,12 @@ TAB      \t
 "false"        {printf("FALSE\n");}
 "return"       {printf("RETURN\n");}
 "for"          {printf("FOR\n");}
-" "            {col++;}
-{ID}           {printf("IDENTIFIER %s\n", yytext);}
-{SID}          {printf("IDENTIFIER %s\n", yytext);}
+" "            {col++; col +=1;}
+{ID}           {printf("IDENTIFIER %s\n", yytext); col += yyleng;}
+{SID}          {printf("IDENTIFIER %s\n", yytext); col += yyleng;}
 {NEWL}         {row++; col = 0;}
 {TAB}          {col+=4;}
+{UNKNOWN}      {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", row, col, yytext); exit(1);}
 
 %%
 	/* C functions used in lexer */
