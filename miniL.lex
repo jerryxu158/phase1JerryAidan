@@ -6,9 +6,8 @@
 
    /* some common rules */
 DIGIT    [0-9]
-NUM      [DIGIT][DIGIT]*
-FUNC     "function"
-INVALN   [DIGIT]+[a-zA-Z_]*
+FUNC     "function"\s
+INVALN   [DIGIT]+[a-zA-Z_]+
 INVALU   [a-zA-z][a-zA-Z0-9_]*_
 SID      [a-zA-Z]
 ID       [a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9]
@@ -34,7 +33,7 @@ UNKNOWN  .
 
 %%
    /* specific lexer rules in regex */
-{NUM}          {printf("NUMBER %s\n", yytext); col += yyleng;}
+{DIGIT}+          {printf("NUMBER %s\n", yytext); col += yyleng;}
 "+"            {printf("ADD\n"); col++;}
 "-"            {printf("SUB\n"); col++;}
 "*"            {printf("MULT\n"); col++;}
@@ -55,7 +54,7 @@ UNKNOWN  .
 {GTE}          {printf("GTE\n"); col += 2;}
 {NE}           {printf("NEQ\n"); col += 2;}
 "array"        {printf("ARRAY\n"); col += 5;}
-FUNC           {printf("FUNCTION\n"); col += 8;}
+"function"         {printf("FUNCTION\n"); col += 8;}
 "beginparams"  {printf("BEGIN_PARAMS\n"); col += 11;}
 "endparams"    {printf("END_PARAMS\n"); col += 9;}
 "beginlocals"  {printf("BEGIN_LOCALS\n"); col += 11;}
