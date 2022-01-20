@@ -5,9 +5,12 @@
 %}
 
    /* some common rules */
+INVALN   [0-9]+[a-zA-Z_]+
 DIGIT    [0-9]
-FUNC     "function"\s
-INVALN   [DIGIT]+[a-zA-Z_]+
+NUM      [DIGIT]+
+NEWL     \n
+TAB      \t
+FUNC     "function"[\s]
 INVALU   [a-zA-z][a-zA-Z0-9_]*_
 SID      [a-zA-Z]
 ID       [a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9]
@@ -27,13 +30,10 @@ SEMI     ;
 COLN     :
 CMMA     ,
 comment  ##.*
-NEWL     \n
-TAB      \t
-UNKNOWN  .
+UNKNOWN  [^TAB NEWL comment CMMA COLN SEMI NE GTE LTE MOD RP LP RB LB GT LT EQUATE ASGN ID SID INVALU INVALN FUNC NUM]
 
 %%
    /* specific lexer rules in regex */
-{DIGIT}+          {printf("NUMBER %s\n", yytext); col += yyleng;}
 "+"            {printf("ADD\n"); col++;}
 "-"            {printf("SUB\n"); col++;}
 "*"            {printf("MULT\n"); col++;}
@@ -87,7 +87,9 @@ UNKNOWN  .
 {INVALU}       {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", row, col, yytext); exit(1);}
 {ID}           {printf("IDENT %s\n", yytext); col += yyleng;}
 {SID}          {printf("IDENT %s\n", yytext); col += yyleng;}
+{DIGIT}+         {printf("NUMBER %s\n", yytext); col += yyleng;}
 {UNKNOWN}      {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", row, col, yytext); exit(1);}
+
 
 %%
 	/* C functions used in lexer */
