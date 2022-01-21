@@ -88,6 +88,7 @@ UNKNOWN  [^TAB NEWL comment CMMA COLN SEMI NE GTE LTE MOD RP LP RB LB GT LT EQUA
 {ID}           {printf("IDENT %s\n", yytext); col += yyleng;}
 {SID}          {printf("IDENT %s\n", yytext); col += yyleng;}
 {DIGIT}+         {printf("NUMBER %s\n", yytext); col += yyleng;}
+
 {UNKNOWN}      {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", row, col, yytext); exit(1);}
 
 
