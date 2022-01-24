@@ -86,7 +86,7 @@ UNKNOWN  [^TAB NEWL comment CMMA COLN SEMI NE GTE LTE MOD RP LP RB LB GT LT EQUA
 {INVALU}       {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", row, col, yytext); exit(1);}
 {ID}           {printf("IDENT %s\n", yytext); col += yyleng;}
 {SID}          {printf("IDENT %s\n", yytext); col += yyleng;}
-{DIGIT}+         {printf("NUMBER %s\n", yytext); col += yyleng;}
+{DIGIT}+       {printf("NUMBER %s\n", yytext); col += yyleng;}
 
 {UNKNOWN}      {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", row, col, yytext); exit(1);}
 
