@@ -10,7 +10,6 @@ DIGIT    [0-9]
 NUM      [DIGIT]+
 NEWL     \n
 TAB      \t
-FUNC     "function"[\s]
 INVALU   [a-zA-z][a-zA-Z0-9_]*_
 SID      [a-zA-Z]
 ID       [a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9]
